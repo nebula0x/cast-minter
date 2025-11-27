@@ -9,10 +9,8 @@ import { MintModal } from '@/components/MintModal';
 import { WalletConnect } from '@/components/WalletConnect';
 import { Button } from '@/components/ui/Button';
 import { Sparkles, Loader2 } from 'lucide-react';
-import { useAccount } from 'wagmi';
 
 export default function Home() {
-  const { isConnected } = useAccount();
   const [fid, setFid] = useState<string>('');
   const [casts, setCasts] = useState<Cast[]>([]);
   const [loading, setLoading] = useState(false);
@@ -22,6 +20,7 @@ export default function Home() {
   const [mintSuccess, setMintSuccess] = useState(false);
   const [txHash, setTxHash] = useState<string>();
   const [isFrameContext, setIsFrameContext] = useState(false);
+  const [isConnected, setIsConnected] = useState(false);
 
   const fetchCasts = useCallback(async (fidOverride?: string) => {
     const targetFid = fidOverride || fid;
@@ -46,7 +45,21 @@ export default function Home() {
           const userFid = context.user.fid.toString();
           setFid(userFid);
           fetchCasts(userFid);
+
+          // Check if wallet is connected
+          const userContext = context.user as any;
+          if (userContext?.custody_address || userContext?.custodyAddress) {
+            setIsConnected(true);
+          }
         }
+
+        // Prompt user to add the app
+        try {
+          await sdk.actions.addFrame();
+        } catch (error) {
+          console.log('User declined to add app or already added:', error);
+        }
+
         sdk.actions.ready();
       } catch (error) {
         console.error('Error initializing frame:', error);
