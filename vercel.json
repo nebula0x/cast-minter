@@ -1,0 +1,16 @@
+{
+    "buildCommand": "npm run build",
+    "devCommand": "npm run dev",
+    "installCommand": "npm install",
+    "framework": "nextjs",
+    "env": {
+        "NEXT_PUBLIC_NEYNAR_API_KEY": {
+            "description": "Your Neynar API Key from https://neynar.com",
+            "required": true
+        },
+        "NEXT_PUBLIC_BASE_RPC_URL": {
+            "description": "Base network RPC URL",
+            "value": "https://mainnet.base.org"
+        }
+    }
+}
