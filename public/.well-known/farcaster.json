@@ -1,0 +1,18 @@
+{
+    "accountAssociation": {
+        "header": "eyJmaWQiOjg4ODg4OCwidHlwZSI6ImN1c3RvZHkiLCJrZXkiOiIweDEyMzQ1Njc4OTAxMjM0NTY3ODkwMTIzNDU2Nzg5MDEyMzQ1Njc4OTAifQ",
+        "payload": "eyJkb21haW4iOiJleGFtcGxlLmNvbSJ9",
+        "signature": "MHhkZWFkYmVlZi4uLg"
+    },
+    "frame": {
+        "version": "1",
+        "name": "Cast Minter",
+        "iconUrl": "https://cast-minter.vercel.app/icon.png",
+        "homeUrl": "https://cast-minter.vercel.app",
+        "imageUrl": "https://cast-minter.vercel.app/opengraph-image",
+        "buttonTitle": "Launch App",
+        "splashImageUrl": "https://cast-minter.vercel.app/icon.png",
+        "splashBackgroundColor": "#eeebff",
+        "webhookUrl": "https://cast-minter.vercel.app/api/webhook"
+    }
+}

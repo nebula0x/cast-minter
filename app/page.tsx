@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import sdk from '@farcaster/frame-sdk';
+import React, { useState, useEffect, useCallback } from 'react';
 import { getUserCasts } from '@/lib/neynar';
 import { Cast } from '@/lib/types';
 import { CastCard } from '@/components/CastCard';
@@ -20,19 +21,39 @@ export default function Home() {
   const [showMintModal, setShowMintModal] = useState(false);
   const [mintSuccess, setMintSuccess] = useState(false);
   const [txHash, setTxHash] = useState<string>();
+  const [isFrameContext, setIsFrameContext] = useState(false);
 
-  const fetchCasts = async () => {
-    if (!fid) return;
+  const fetchCasts = useCallback(async (fidOverride?: string) => {
+    const targetFid = fidOverride || fid;
+    if (!targetFid) return;
 
     setLoading(true);
     try {
-      const response = await getUserCasts(parseInt(fid));
+      const response = await getUserCasts(parseInt(targetFid));
       setCasts(response.casts || []);
     } catch (error) {
       console.error('Error fetching casts:', error);
     }
     setLoading(false);
-  };
+  }, [fid]);
+
+  useEffect(() => {
+    const initFrame = async () => {
+      try {
+        const context = await sdk.context;
+        if (context?.user?.fid) {
+          setIsFrameContext(true);
+          const userFid = context.user.fid.toString();
+          setFid(userFid);
+          fetchCasts(userFid);
+        }
+        sdk.actions.ready();
+      } catch (error) {
+        console.error('Error initializing frame:', error);
+      }
+    };
+    initFrame();
+  }, [fetchCasts]);
 
   const handleMintClick = (cast: Cast) => {
     setSelectedCast(cast);
@@ -113,7 +134,7 @@ export default function Home() {
               />
               <Button
                 variant="primary"
-                onClick={fetchCasts}
+                onClick={() => fetchCasts()}
                 loading={loading}
                 disabled={!fid || !isConnected}
               >
