@@ -8,6 +8,18 @@ export const metadata: Metadata = {
   icons: {
     icon: '/favicon.ico',
   },
+  openGraph: {
+    title: "Cast Minter",
+    description: "Mint your Farcaster casts as NFTs",
+    images: [`${process.env.NEXT_PUBLIC_APP_URL}/opengraph-image`],
+  },
+  other: {
+    "fc:frame": "vNext",
+    "fc:frame:image": `${process.env.NEXT_PUBLIC_APP_URL}/opengraph-image`,
+    "fc:frame:button:1": "Launch App",
+    "fc:frame:button:1:action": "link",
+    "fc:frame:button:1:target": process.env.NEXT_PUBLIC_APP_URL || "https://cast-minter.vercel.app",
+  },
 };
 
 export default function RootLayout({
