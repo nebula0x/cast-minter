@@ -132,34 +132,36 @@ export default function Home() {
             Preserve your memorable Farcaster moments as unique NFTs on Base
           </p>
 
-          {/* FID Input */}
-          <div className="glass rounded-2xl p-6 max-w-xl mx-auto">
-            <label className="block text-left mb-2 font-semibold">
-              Enter Farcaster ID (FID)
-            </label>
-            <div className="flex gap-3">
-              <input
-                type="number"
-                value={fid}
-                onChange={(e) => setFid(e.target.value)}
-                placeholder="e.g., 3"
-                className="flex-1 bg-background/50 border border-border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary"
-              />
-              <Button
-                variant="primary"
-                onClick={() => fetchCasts()}
-                loading={loading}
-                disabled={!fid || !isConnected}
-              >
-                Load Casts
-              </Button>
+          {/* FID Input - Only show if not in Frame context */}
+          {!isFrameContext && (
+            <div className="glass rounded-2xl p-6 max-w-xl mx-auto">
+              <label className="block text-left mb-2 font-semibold">
+                Enter Farcaster ID (FID)
+              </label>
+              <div className="flex gap-3">
+                <input
+                  type="number"
+                  value={fid}
+                  onChange={(e) => setFid(e.target.value)}
+                  placeholder="e.g., 3"
+                  className="flex-1 bg-background/50 border border-border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary"
+                />
+                <Button
+                  variant="primary"
+                  onClick={() => fetchCasts()}
+                  loading={loading}
+                  disabled={!fid || !isConnected}
+                >
+                  Load Casts
+                </Button>
+              </div>
+              {!isConnected && (
+                <p className="text-sm text-amber-500 mt-3 text-left">
+                  ⚠️ Please connect your wallet first
+                </p>
+              )}
             </div>
-            {!isConnected && (
-              <p className="text-sm text-amber-500 mt-3 text-left">
-                ⚠️ Please connect your wallet first
-              </p>
-            )}
-          </div>
+          )}
         </div>
 
         {/* Loading state */}
