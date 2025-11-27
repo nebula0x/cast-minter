@@ -8,10 +8,10 @@
   :root {
     --background: 240 10% 3.9%;
     --foreground: 0 0% 98%;
-    --primary: 263 70% 50%;
+    --primary: 221 100% 50%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 263 50% 30%;
-    --accent: 280 80% 60%;
+    --secondary: 221 50% 20%;
+    --accent: 261 51% 58%;
     --muted: 240 5% 25%;
     --border: 240 5% 20%;
     --radius: 0.75rem;
@@ -81,11 +81,11 @@
 
   @keyframes glow {
     from {
-      box-shadow: 0 0 20px rgba(147, 51, 234, 0.3);
+      box-shadow: 0 0 20px rgba(133, 93, 205, 0.3);
     }
 
     to {
-      box-shadow: 0 0 40px rgba(147, 51, 234, 0.6);
+      box-shadow: 0 0 40px rgba(133, 93, 205, 0.6);
     }
   }
 

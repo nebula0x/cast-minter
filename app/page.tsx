@@ -89,7 +89,7 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-secondary/20">
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/20">
       {/* Header */}
       <header className="border-b border-border/50 backdrop-blur-xl sticky top-0 z-40">
         <div className="container mx-auto px-4 py-4">
