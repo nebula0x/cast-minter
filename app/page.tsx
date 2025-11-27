@@ -39,18 +39,42 @@ export default function Home() {
   useEffect(() => {
     const initFrame = async () => {
       try {
+        console.log('Initializing Farcaster Frame SDK...');
+
         const context = await sdk.context;
+        console.log('SDK context received:', context);
+
         if (context?.user?.fid) {
           setIsFrameContext(true);
           const userFid = context.user.fid.toString();
+          console.log('User FID:', userFid);
           setFid(userFid);
-          fetchCasts(userFid);
 
           // Check if wallet is connected
           const userContext = context.user as any;
-          if (userContext?.custody_address || userContext?.custodyAddress) {
+          const hasWallet = userContext?.custody_address ||
+            userContext?.custodyAddress ||
+            userContext?.verified_addresses?.eth_addresses?.[0];
+
+          console.log('Wallet connected:', hasWallet);
+          if (hasWallet) {
             setIsConnected(true);
           }
+
+          // Fetch casts after SDK is initialized
+          console.log('Fetching casts for FID:', userFid);
+          setLoading(true);
+          try {
+            const response = await getUserCasts(parseInt(userFid));
+            console.log('Casts response:', response);
+            setCasts(response.casts || []);
+          } catch (error) {
+            console.error('Error fetching casts:', error);
+          } finally {
+            setLoading(false);
+          }
+        } else {
+          console.warn('No user FID found in SDK context');
         }
 
         // Prompt user to add the app
@@ -60,13 +84,15 @@ export default function Home() {
           console.log('User declined to add app or already added:', error);
         }
 
+        // Signal that the frame is ready - MUST be called last
+        console.log('Calling sdk.actions.ready()');
         sdk.actions.ready();
       } catch (error) {
         console.error('Error initializing frame:', error);
       }
     };
     initFrame();
-  }, [fetchCasts]);
+  }, []); // Empty dependency array - only run once on mount
 
   const handleMintClick = (cast: Cast) => {
     setSelectedCast(cast);
