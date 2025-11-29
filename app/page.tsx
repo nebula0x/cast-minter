@@ -168,7 +168,7 @@ export default function Home() {
                   variant="primary"
                   onClick={() => fetchCasts()}
                   loading={loading}
-                  disabled={!fid || !isConnected}
+                  disabled={!fid}
                 >
                   Load Last Cast
                 </Button>
