@@ -123,15 +123,15 @@ export default function Home() {
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/20">
       {/* Header */}
       <header className="border-b border-border/50 backdrop-blur-xl sticky top-0 z-40">
-        <div className="container mx-auto px-4 py-4">
+        <div className="container mx-auto px-3 py-2 sm:px-4 sm:py-3">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-primary to-accent rounded-xl flex items-center justify-center">
-                <Sparkles className="w-6 h-6 text-white" />
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-primary to-accent rounded-lg flex items-center justify-center">
+                <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
               </div>
               <div>
-                <h1 className="text-xl font-bold gradient-text">Cast Minter</h1>
-                <p className="text-xs text-muted-foreground">Mint your Farcaster casts as NFTs</p>
+                <h1 className="text-base sm:text-lg font-bold gradient-text">Cast Minter</h1>
+                <p className="text-[10px] sm:text-xs text-muted-foreground hidden sm:block">Mint your casts as NFTs</p>
               </div>
             </div>
             <WalletConnect />
@@ -140,29 +140,29 @@ export default function Home() {
       </header>
 
       {/* Main content */}
-      <main className="container mx-auto px-4 py-12">
-        {/* Hero section */}
-        <div className="text-center mb-12 max-w-3xl mx-auto">
-          <h2 className="text-5xl font-bold mb-4 bg-gradient-to-r from-white via-primary to-accent bg-clip-text text-transparent">
-            Turn Your Casts Into NFTs
-          </h2>
-          <p className="text-lg text-muted-foreground mb-8">
-            Preserve your memorable Farcaster moments as unique NFTs on Base
-          </p>
+      <main className="container mx-auto px-3 py-4 sm:px-4 sm:py-6">
+        {/* Hero section - Only show if not in Frame context */}
+        {!isFrameContext && (
+          <div className="text-center mb-6 max-w-2xl mx-auto">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-2 bg-gradient-to-r from-white via-primary to-accent bg-clip-text text-transparent">
+              Turn Your Casts Into NFTs
+            </h2>
+            <p className="text-sm sm:text-base text-muted-foreground mb-4">
+              Preserve your memorable Farcaster moments as unique NFTs on Base
+            </p>
 
-          {/* FID Input - Only show if not in Frame context */}
-          {!isFrameContext && (
-            <div className="glass rounded-2xl p-6 max-w-xl mx-auto">
-              <label className="block text-left mb-2 font-semibold">
+            {/* FID Input */}
+            <div className="glass rounded-xl p-4 max-w-xl mx-auto">
+              <label className="block text-left mb-2 text-sm font-semibold">
                 Enter Farcaster ID (FID)
               </label>
-              <div className="flex gap-3">
+              <div className="flex gap-2">
                 <input
                   type="number"
                   value={fid}
                   onChange={(e) => setFid(e.target.value)}
                   placeholder="e.g., 3"
-                  className="flex-1 bg-background/50 border border-border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary"
+                  className="flex-1 bg-background/50 border border-border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                 />
                 <Button
                   variant="primary"
@@ -170,23 +170,18 @@ export default function Home() {
                   loading={loading}
                   disabled={!fid}
                 >
-                  Load Last Cast
+                  Load
                 </Button>
               </div>
-              {!isConnected && (
-                <p className="text-sm text-amber-500 mt-3 text-left">
-                  ⚠️ Please connect your wallet first
-                </p>
-              )}
             </div>
-          )}
-        </div>
+          </div>
+        )}
 
         {/* Loading state */}
         {loading && (
-          <div className="text-center py-12">
-            <Loader2 className="w-12 h-12 animate-spin mx-auto text-primary mb-4" />
-            <p className="text-muted-foreground">Loading your last cast...</p>
+          <div className="text-center py-8">
+            <Loader2 className="w-10 h-10 sm:w-12 sm:h-12 animate-spin mx-auto text-primary mb-3" />
+            <p className="text-sm text-muted-foreground">Loading your last cast...</p>
           </div>
         )}
 
@@ -206,8 +201,8 @@ export default function Home() {
 
         {/* Empty state */}
         {!loading && casts.length === 0 && fid && (
-          <div className="text-center py-12 glass rounded-2xl">
-            <p className="text-muted-foreground">No cast found for this user</p>
+          <div className="text-center py-8 glass rounded-xl">
+            <p className="text-sm text-muted-foreground">No cast found for this user</p>
           </div>
         )}
       </main>
@@ -224,8 +219,8 @@ export default function Home() {
       />
 
       {/* Footer */}
-      <footer className="border-t border-border/50 mt-20 py-8">
-        <div className="container mx-auto px-4 text-center text-sm text-muted-foreground">
+      <footer className="border-t border-border/50 mt-8 py-4">
+        <div className="container mx-auto px-3 sm:px-4 text-center text-xs text-muted-foreground">
           <p>Built with ❤️ for Farcaster • Powered by Zora on Base</p>
         </div>
       </footer>
