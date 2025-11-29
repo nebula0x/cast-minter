@@ -1,12 +1,15 @@
 'use client';
 
+import { WagmiProvider } from 'wagmi';
 import { QueryClientProvider } from '@tanstack/react-query';
-import { queryClient } from '@/lib/web3';
+import { config, queryClient } from '@/lib/web3';
 
 export function Providers({ children }: { children: React.ReactNode }) {
     return (
-        <QueryClientProvider client={queryClient}>
-            {children}
-        </QueryClientProvider>
+        <WagmiProvider config={config}>
+            <QueryClientProvider client={queryClient}>
+                {children}
+            </QueryClientProvider>
+        </WagmiProvider>
     );
 }

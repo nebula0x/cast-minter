@@ -2,6 +2,7 @@
 
 import sdk from '@farcaster/frame-sdk';
 import React, { useState, useEffect, useCallback } from 'react';
+import { useAccount } from 'wagmi';
 import { getUserCasts } from '@/lib/neynar';
 import { Cast } from '@/lib/types';
 import { CastCard } from '@/components/CastCard';
@@ -20,7 +21,7 @@ export default function Home() {
   const [mintSuccess, setMintSuccess] = useState(false);
   const [txHash, setTxHash] = useState<string>();
   const [isFrameContext, setIsFrameContext] = useState(false);
-  const [isConnected, setIsConnected] = useState(false);
+  const { isConnected, address } = useAccount();
 
   const fetchCasts = useCallback(async (fidOverride?: string) => {
     const targetFid = fidOverride || fid;
@@ -28,13 +29,15 @@ export default function Home() {
 
     setLoading(true);
     try {
-      const response = await getUserCasts(parseInt(targetFid));
+      const response = await getUserCasts(parseInt(targetFid), 1); // Fetch only last cast
       setCasts(response.casts || []);
     } catch (error) {
       console.error('Error fetching casts:', error);
     }
     setLoading(false);
   }, [fid]);
+
+  // ... existing code ...
 
   useEffect(() => {
     const initFrame = async () => {
@@ -50,26 +53,15 @@ export default function Home() {
           console.log('User FID:', userFid);
           setFid(userFid);
 
-          // Check if wallet is connected
-          const userContext = context.user as any;
-          const hasWallet = userContext?.custody_address ||
-            userContext?.custodyAddress ||
-            userContext?.verified_addresses?.eth_addresses?.[0];
-
-          console.log('Wallet connected:', hasWallet);
-          if (hasWallet) {
-            setIsConnected(true);
-          }
-
-          // Fetch casts after SDK is initialized
-          console.log('Fetching casts for FID:', userFid);
+          // Fetch only the last cast after SDK is initialized
+          console.log('Fetching last cast for FID:', userFid);
           setLoading(true);
           try {
-            const response = await getUserCasts(parseInt(userFid));
-            console.log('Casts response:', response);
+            const response = await getUserCasts(parseInt(userFid), 1); // Fetch only 1 cast
+            console.log('Last cast response:', response);
             setCasts(response.casts || []);
           } catch (error) {
-            console.error('Error fetching casts:', error);
+            console.error('Error fetching last cast:', error);
           } finally {
             setLoading(false);
           }
@@ -178,7 +170,7 @@ export default function Home() {
                   loading={loading}
                   disabled={!fid || !isConnected}
                 >
-                  Load Casts
+                  Load Last Cast
                 </Button>
               </div>
               {!isConnected && (
@@ -194,13 +186,13 @@ export default function Home() {
         {loading && (
           <div className="text-center py-12">
             <Loader2 className="w-12 h-12 animate-spin mx-auto text-primary mb-4" />
-            <p className="text-muted-foreground">Loading casts...</p>
+            <p className="text-muted-foreground">Loading your last cast...</p>
           </div>
         )}
 
-        {/* Casts grid */}
+        {/* Last cast display */}
         {!loading && casts.length > 0 && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="max-w-2xl mx-auto">
             {casts.map((cast) => (
               <CastCard
                 key={cast.hash}
@@ -215,7 +207,7 @@ export default function Home() {
         {/* Empty state */}
         {!loading && casts.length === 0 && fid && (
           <div className="text-center py-12 glass rounded-2xl">
-            <p className="text-muted-foreground">No casts found for this FID</p>
+            <p className="text-muted-foreground">No cast found for this user</p>
           </div>
         )}
       </main>
